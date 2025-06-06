@@ -85,6 +85,155 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure and install plugins ]]
 require('lazy').setup({
   {
+    'mfussenegger/nvim-dap',
+    event = 'VeryLazy',
+    dependencies = {
+      'rcarriga/nvim-dap-ui',
+      'nvim-neotest/nvim-nio',
+      'jay-babu/mason-nvim-dap.nvim',
+      'theHamsta/nvim-dap-virtual-text',
+    },
+    config = function()
+      require('dap').set_log_level 'DEBUG'
+    end,
+    keys = {
+      -- Debugger
+      {
+        '<leader>d',
+        group = 'Debugger',
+        nowait = true,
+        remap = false,
+      },
+      {
+        '<leader>dt',
+        function()
+          require('dap').toggle_breakpoint()
+        end,
+        desc = 'Toggle Breakpoint',
+        nowait = true,
+        remap = false,
+      },
+      {
+        '<leader>dc',
+        function()
+          require('dap').continue()
+        end,
+        desc = 'Continue',
+        nowait = true,
+        remap = false,
+      },
+      {
+        '<leader>di',
+        function()
+          require('dap').step_into()
+        end,
+        desc = 'Step Into',
+        nowait = true,
+        remap = false,
+      },
+      {
+        '<leader>do',
+        function()
+          require('dap').step_over()
+        end,
+        desc = 'Step Over',
+        nowait = true,
+        remap = false,
+      },
+      {
+        '<leader>du',
+        function()
+          require('dap').step_out()
+        end,
+        desc = 'Step Out',
+        nowait = true,
+        remap = false,
+      },
+      {
+        '<leader>dr',
+        function()
+          require('dap').repl.open()
+        end,
+        desc = 'Open REPL',
+        nowait = true,
+        remap = false,
+      },
+      {
+        '<leader>dl',
+        function()
+          require('dap').run_last()
+        end,
+        desc = 'Run Last',
+        nowait = true,
+        remap = false,
+      },
+      {
+        '<leader>dq',
+        function()
+          require('dap').terminate()
+          require('dapui').close()
+          require('nvim-dap-virtual-text').toggle()
+        end,
+        desc = 'Terminate',
+        nowait = true,
+        remap = false,
+      },
+      {
+        '<leader>db',
+        function()
+          require('dap').list_breakpoints()
+        end,
+        desc = 'List Breakpoints',
+        nowait = true,
+        remap = false,
+      },
+      {
+        '<leader>de',
+        function()
+          require('dap').set_exception_breakpoints { 'all' }
+        end,
+        desc = 'Set Exception Breakpoints',
+        nowait = true,
+        remap = false,
+      },
+    },
+  },
+  {
+    'mfussenegger/nvim-dap-python',
+    ft = 'python',
+    dependencies = { 'mfussenegger/nvim-dap' },
+    config = function()
+      require('dap-python').setup '~/.virtualenvs/debugpy/bin/python'
+      -- Optional: override python config
+      local dap = require 'dap'
+      dap.configurations.python = {
+        {
+          type = 'python',
+          request = 'launch',
+          name = 'Launch file',
+          program = '${file}',
+          pythonPath = function()
+            return vim.fn.exepath 'python3'
+          end,
+        },
+      }
+    end,
+  },
+  {
+    'kawre/leetcode.nvim',
+    build = ':TSUpdate html', -- if you have `nvim-treesitter` installed
+    dependencies = {
+      'nvim-telescope/telescope.nvim',
+      -- "ibhagwan/fzf-lua",
+      'nvim-lua/plenary.nvim',
+      'MunifTanjim/nui.nvim',
+    },
+    opts = {
+      lang = 'python3',
+      -- configuration goes here
+    },
+  },
+  {
     'kevinhwang91/nvim-ufo',
     dependencies = {
       { 'kevinhwang91/promise-async' },
@@ -128,9 +277,6 @@ require('lazy').setup({
         changedelete = { text = '~' },
       },
     },
-  },
-  {
-    'mfussenegger/nvim-dap',
   },
   {
     'mrcjkb/rustaceanvim',
@@ -394,7 +540,7 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        -- clangd = {},
+        clangd = {},
         gopls = {
           settings = {
 
@@ -405,8 +551,8 @@ require('lazy').setup({
             },
           },
         },
-        -- pyright = {},
-        -- rust_analyzer = {},
+        pyright = {},
+        rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
