@@ -29,6 +29,10 @@ vim.opt.inccommand = 'split'
 vim.opt.cursorline = true
 vim.opt.scrolloff = 20
 
+vim.diagnostic.config({
+  virtual_text = true
+})
+
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 vim.keymap.set('v', '<', '<gv')
 vim.keymap.set('v', '>', '>gv')
@@ -43,6 +47,11 @@ vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left wind
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+
+vim.keymap.set('n', '<leader>cf', function()
+  vim.fn.setreg('+', vim.fn.expand('%:p'))
+  vim.notify("Copied: " .. vim.fn.expand('%:p'))
+end, { noremap = true, silent = true, desc = "Copy full file path" })
 
 
 vim.api.nvim_create_autocmd('TextYankPost', {
@@ -322,7 +331,6 @@ require('lazy').setup({
           },
         },
         pyright = {},
-        rust_analyzer = {},
 
         lua_ls = {
           settings = {
@@ -466,7 +474,7 @@ require('lazy').setup({
     'folke/tokyonight.nvim',
     priority = 1000,
     init = function()
-      vim.cmd.colorscheme 'tokyonight-night'
+      vim.cmd.colorscheme 'delek'
 
       vim.cmd.hi 'Comment gui=none'
     end,
