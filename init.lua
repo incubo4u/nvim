@@ -3,7 +3,6 @@ vim.g.maplocalleader = ' '
 
 vim.g.have_nerd_font = true
 
-
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.mouse = 'a'
@@ -29,9 +28,9 @@ vim.opt.inccommand = 'split'
 vim.opt.cursorline = true
 vim.opt.scrolloff = 20
 
-vim.diagnostic.config({
-  virtual_text = true
-})
+vim.diagnostic.config {
+  virtual_text = true,
+}
 
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 vim.keymap.set('v', '<', '<gv')
@@ -49,10 +48,9 @@ vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower win
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
 vim.keymap.set('n', '<leader>cf', function()
-  vim.fn.setreg('+', vim.fn.expand('%:p'))
-  vim.notify("Copied: " .. vim.fn.expand('%:p'))
-end, { noremap = true, silent = true, desc = "Copy full file path" })
-
+  vim.fn.setreg('+', vim.fn.expand '%:p')
+  vim.notify('Copied: ' .. vim.fn.expand '%:p')
+end, { noremap = true, silent = true, desc = 'Copy full file path' })
 
 vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking (copying) text',
@@ -64,8 +62,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
   local lazyrepo = 'https://github.com/folke/lazy.nvim.git'
-  local out = vim.fn.system { 'git', 'clone', '--filter=blob:none', '--branch=stable', lazyrepo, lazypath
-}
+  local out = vim.fn.system { 'git', 'clone', '--filter=blob:none', '--branch=stable', lazyrepo, lazypath }
   if vim.v.shell_error ~= 0 then
     error('Error cloning lazy.nvim:\n' .. out)
   end
@@ -104,7 +101,14 @@ require('lazy').setup({
       { '<leader>t', '<cmd>NvimTreeToggle<cr>' },
     },
   },
-  'sindrets/diffview.nvim',
+  {
+    'sindrets/diffview.nvim',
+    keys = {
+      { '<leader>gd', '<cmd>DiffviewOpen<cr>', desc = '[G]it [D]iff view' },
+      { '<leader>gh', '<cmd>DiffviewFileHistory %<cr>', desc = '[G]it file [H]istory' },
+      { '<leader>gc', '<cmd>DiffviewClose<cr>', desc = '[G]it diff [C]lose' },
+    },
+  },
   'tpope/vim-sleuth',
   {
     'lewis6991/gitsigns.nvim',
@@ -120,12 +124,12 @@ require('lazy').setup({
   },
   {
     'mrcjkb/rustaceanvim',
-    version = '^5', 
-    lazy = false, 
+    version = '^5',
+    lazy = false,
   },
   {
     'folke/which-key.nvim',
-    event = 'VimEnter', 
+    event = 'VimEnter',
     opts = {
       icons = {
         mappings = vim.g.have_nerd_font,
@@ -179,7 +183,7 @@ require('lazy').setup({
     branch = '0.1.x',
     dependencies = {
       'nvim-lua/plenary.nvim',
-      { 
+      {
         'nvim-telescope/telescope-fzf-native.nvim',
         build = 'make',
         cond = function()
@@ -320,18 +324,6 @@ require('lazy').setup({
       capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
       local servers = {
         clangd = {},
-        gopls = {
-          settings = {
-
-            completeUnimported = true,
-            usePlaceholders = true,
-            analyses = {
-              unusedparams = true,
-            },
-          },
-        },
-        pyright = {},
-
         lua_ls = {
           settings = {
             Lua = {
@@ -412,8 +404,7 @@ require('lazy').setup({
           end
           return 'make install_jsregexp'
         end)(),
-        dependencies = {
-        },
+        dependencies = {},
       },
       'saadparwaiz1/cmp_luasnip',
 
@@ -442,7 +433,6 @@ require('lazy').setup({
 
           ['<C-y>'] = cmp.mapping.confirm { select = true },
 
-
           ['<C-Space>'] = cmp.mapping.complete {},
 
           ['<C-l>'] = cmp.mapping(function()
@@ -455,7 +445,6 @@ require('lazy').setup({
               luasnip.jump(-1)
             end
           end, { 'i', 's' }),
-
         },
         sources = {
           {
@@ -495,7 +484,6 @@ require('lazy').setup({
       statusline.section_location = function()
         return '%2l:%-2v'
       end
-
     end,
   },
   {
@@ -511,7 +499,6 @@ require('lazy').setup({
       indent = { enable = true, disable = { 'ruby' } },
     },
   },
-
 }, {
   ui = {
     icons = vim.g.have_nerd_font and {} or {
@@ -531,4 +518,3 @@ require('lazy').setup({
     },
   },
 })
-
